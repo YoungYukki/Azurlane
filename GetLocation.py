@@ -46,68 +46,6 @@ def WindowShot(name):
     image = pyautogui.screenshot(region=region)
     image.save(f'static/{name}.png')
 
-def GetOilLocation():
-    name = 'oil'
-    # 仅第一次使用(如果没有get_location_window.png)
-    WindowShot('get_location_window')
-    # 读取源文件和待搜索的图片
-    img_source = aircv.imread('static/get_location_window.png')
-    img_search = aircv.imread('static/boat_overfloat_zhengli.png')
-    # 搜索
-    result = aircv.find_template(img_source, img_search)
-    # 获取左上角、右下角坐标,可信度
-    left_top_location = result['rectangle'][0]
-    right_down_location = result['rectangle'][3]
-    confidence = f'''{result['confidence']*100}%'''
-    print(f'<整理>在窗口里面的坐标\n左上角:{left_top_location}\n右下角:{right_down_location}\n可信度:{confidence}')
-    # 写入JSON文件
-    writed = result['result']
-    with open('static/locations.json', 'r') as temp:
-        locations = json.load(temp)
-    if name in locations.keys():
-        locations[name] = writed
-    else:
-        locations.update({name:writed})
-    data = json.dumps(locations)
-    with open('static/locations.json', 'w') as temp:
-        temp.write(data)
-    # 通过opencv显示出来
-    image = cv2.imread('static/get_location_window.png')
-    cv2.rectangle(image, left_top_location, right_down_location, (0, 255, 255), 3)
-    cv2.imshow(name, image)
-    cv2.waitKey()
-
-def GetGoldenLocation():
-    name = 'golden'
-    # 仅第一次使用(如果没有get_location_window.png)
-    WindowShot('get_location_window')
-    # 读取源文件和待搜索的图片
-    img_source = aircv.imread('static/get_location_window.png')
-    img_search = aircv.imread('static/boat_overfloat_zhengli.png')
-    # 搜索
-    result = aircv.find_template(img_source, img_search)
-    # 获取左上角、右下角坐标,可信度
-    left_top_location = result['rectangle'][0]
-    right_down_location = result['rectangle'][3]
-    confidence = f'''{result['confidence']*100}%'''
-    print(f'<整理>在窗口里面的坐标\n左上角:{left_top_location}\n右下角:{right_down_location}\n可信度:{confidence}')
-    # 写入JSON文件
-    writed = result['result']
-    with open('static/locations.json', 'r') as temp:
-        locations = json.load(temp)
-    if name in locations.keys():
-        locations[name] = writed
-    else:
-        locations.update({name:writed})
-    data = json.dumps(locations)
-    with open('static/locations.json', 'w') as temp:
-        temp.write(data)
-    # 通过opencv显示出来
-    image = cv2.imread('static/get_location_window.png')
-    cv2.rectangle(image, left_top_location, right_down_location, (0, 255, 255), 3)
-    cv2.imshow(name, image)
-    cv2.waitKey()
-
 def GetButtonLocation(name, search_file_path, isFirst = False):
     # 仅第一次使用(如果没有get_location_window.png)
     if isFirst:
