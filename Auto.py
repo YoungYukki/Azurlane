@@ -5,6 +5,7 @@ import time
 import aircv
 import cv2
 import numpy
+import os
 
 def click(location=(1,1)):
     print(f'点击的坐标是:{location}')
@@ -12,16 +13,20 @@ def click(location=(1,1)):
     pyautogui.click()
 
 def logging(location):
-        # 获取时间戳
-        now_time = time.localtime()
-        file_name = f'Spoils_{now_time[0]}_{now_time[1]}_{now_time[2]}_{now_time[3]}_{str(now_time[4]).zfill(2)}_{now_time[5]}.jpg'
-        print(file_name)
-        # 截图
-        width = location[2]-location[0]
-        high = location[3]-location[1]
-        region = (location[0], location[1], width, high)
-        image = pyautogui.screenshot(region=region)
-        image.save(f'Log/{file_name}')
+    # 检测文件夹里面是否有Log
+    folds = os.listdir('.')
+    print(folds)
+    if not 'Log' in folds:
+        os.mkdir('Log')
+    # 获取时间戳
+    now_time = time.localtime()
+    file_name = f'Spoils_{now_time[0]}_{now_time[1]}_{now_time[2]}_{now_time[3]}_{str(now_time[4]).zfill(2)}_{now_time[5]}.jpg'
+    # 截图
+    width = location[2]-location[0]
+    high = location[3]-location[1]
+    region = (location[0], location[1], width, high)
+    image = pyautogui.screenshot(region=region)
+    image.save(f'Log/{file_name}')
 
 class AutoFight:
     def __init__(self, times=1):
